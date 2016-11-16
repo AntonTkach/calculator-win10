@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace CalculatorWin10
 {
@@ -7,7 +8,7 @@ namespace CalculatorWin10
         public static string firstOperator = "";
         public static string currentOperator = "";
         public static string mathOperator = "";
-        private static string _functionInput;
+        private static string functionInput;
         //public static decimal result;
         
         public static void WriteOperator(string selectedOperator)
@@ -98,9 +99,9 @@ namespace CalculatorWin10
         private static void DetermineVariable()
         {
             if (DisplayInfo.IsOperatorShown)
-                _functionInput = DisplayInfo.secondVarValue;
+                functionInput = DisplayInfo.secondVarValue;
             else
-                _functionInput = DisplayInfo.currentVarValue;
+                functionInput = DisplayInfo.currentVarValue;
 
         }
 
@@ -122,16 +123,16 @@ namespace CalculatorWin10
                     Division();
                     break;
                 case "percent":
-                    Percentage(_functionInput);
+                    Percentage(functionInput);
                     break;
                 case "squareRoot":
-                    SquareRoot(_functionInput);
+                    SquareRoot(functionInput);
                     break;
                 case "powerOfTwo":
-                    PowerOfTwo(_functionInput);
+                    PowerOfTwo(functionInput);
                     break;
                 case "oneOver":
-                    OneOver(_functionInput);
+                    OneOver(functionInput);
                     break;
                 default:
                     break;
@@ -168,16 +169,18 @@ namespace CalculatorWin10
         }
         private static void Percentage(string input)
         {
-            //DisplayInfo.expressionValue =
-            //    decimal.Parse(DisplayInfo.currentVarValue)
-            //    * decimal.Parse(DisplayInfo.secondVarValue);
-            //DisplayInfo.secondVarValue = "";
+            DisplayInfo.expressionValue =
+                decimal.Parse(input)
+                * decimal.Parse(input) / 100m;
+            DisplayInfo.secondVarValue = "";
         }
         private static void SquareRoot(string input)
         {
-            DisplayInfo.expressionValue =
-                decimal.Parse(input)
-                * decimal.Parse(input)/100m;
+            DisplayInfo.expressionValue = decimal
+                .Parse(Math
+                .Sqrt(double.Parse(input))
+                .ToString(CultureInfo.InvariantCulture));
+
             //DisplayInfo.secondVarValue = "";
         }
         private static void PowerOfTwo(string input)
