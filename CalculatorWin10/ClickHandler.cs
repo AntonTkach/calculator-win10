@@ -50,7 +50,7 @@ namespace CalculatorWin10
                     buttonValue == "division" 
                     )
                 {
-                    if (!DisplayInfo.IsOperatorShown)
+                    if (!DisplayInfo.IsFirstOperatorShown)
                     {
                         MathControls.firstOperator = buttonValue;
                         MathControls.WriteOperator(MathControls.firstOperator);

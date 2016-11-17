@@ -8,23 +8,23 @@ using Windows.UI.Xaml.Controls;
 
 namespace CalculatorWin10
 {
-    class DisplayInfo
+    internal static class DisplayInfo
     {
         public static string currentExpression = "";
-        public static string currentVarValue = "";
+        public static string firstVarValue = "";
         public static string secondVarValue = "";
         public static decimal expressionValue = 0;
         public static bool IsEqualPressed = false;
-        public static bool IsOperatorShown = false;
-        public static bool IsSecondOperatorShown = true;
+        public static bool IsFirstOperatorShown = false;
+        public static bool IsSecondOperatorShown = false;
         public static bool IsDotShown = false;
         public static void DisplayToScreen(string tempChar)
         {
-            currentVarValue += tempChar;
-            bool tempBool = decimal.TryParse(currentVarValue, out expressionValue);
+            firstVarValue += tempChar;
+            bool tempBool = decimal.TryParse(firstVarValue, out expressionValue);
         }
 
-        internal static void InfoHandler(string buttonValue)
+        public static void InfoHandler(string buttonValue)
         {
             switch (buttonValue)
             {
@@ -32,9 +32,9 @@ namespace CalculatorWin10
                     ClearEverything();
                     break;
                 case "clear":
-                    if (IsOperatorShown==false)
+                    if (IsFirstOperatorShown==false)
                     {
-                        currentVarValue = "";
+                        firstVarValue = "";
                     }
                     else
                         secondVarValue = "";
@@ -44,22 +44,22 @@ namespace CalculatorWin10
                     break;
                 case "erase":
                     
-                    if (currentVarValue.Length <= 1)
+                    if (firstVarValue.Length <= 1)
                     {
                         expressionValue = 0;
-                        currentVarValue = "";
+                        firstVarValue = "";
                         break;
                     }
-                    if (currentVarValue[currentVarValue.Length - 1]
+                    if (firstVarValue[firstVarValue.Length - 1]
                         .ToString() == ".")
                     {
                         IsDotShown = false;
                     }
-                    currentVarValue = 
-                        currentVarValue.Remove(
-                            currentVarValue.Length - 1);
-                    if (currentVarValue == "") currentVarValue = "0";
-                    expressionValue = decimal.Parse(currentVarValue);
+                    firstVarValue = 
+                        firstVarValue.Remove(
+                            firstVarValue.Length - 1);
+                    if (firstVarValue == "") firstVarValue = "0";
+                    expressionValue = decimal.Parse(firstVarValue);
                     
                     
                     break;
@@ -72,12 +72,12 @@ namespace CalculatorWin10
         {
             MathControls.ExecuteFunction(MathControls.firstOperator);
             //expressionValue = MathHandler.result;
-            currentVarValue = expressionValue.ToString();
-            if (IsOperatorShown)
+            firstVarValue = expressionValue.ToString();
+            if (IsFirstOperatorShown)
             {
                 currentExpression = "";
                 IsDotShown = false;
-                IsOperatorShown = false;
+                IsFirstOperatorShown = false;
                 if (MainPage.myObj.ToString() == "equals")
                     IsEqualPressed = true;
             }
@@ -91,10 +91,10 @@ namespace CalculatorWin10
         {
             if (currentExpression=="" & IsEqualPressed)
             {
-                currentVarValue = "";
+                firstVarValue = "";
                 IsEqualPressed = false;
             }
-            if (!IsOperatorShown)
+            if (!IsFirstOperatorShown)
             {
                 if ((!IsDotShown) && buttonValue == ".")
                 {
@@ -119,16 +119,16 @@ namespace CalculatorWin10
         private static void ClearEverything()
         {
             currentExpression = "";
-            currentVarValue = "";
+            firstVarValue = "";
             secondVarValue = "";
             expressionValue = 0;
             IsEqualPressed = false;
-            IsOperatorShown = false;
-            IsSecondOperatorShown = true;
+            IsFirstOperatorShown = false;
+            IsSecondOperatorShown = false;
             IsDotShown = false;
             MathControls.firstOperator = "";
             MathControls.currentOperator = "";
-            MathControls.mathOperator = "";
+            MathControls.mathFunction = "";
         }
     }
 }

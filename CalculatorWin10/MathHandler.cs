@@ -7,107 +7,139 @@ namespace CalculatorWin10
     {
         public static string firstOperator = "";
         public static string currentOperator = "";
-        public static string mathOperator = "";
+        public static string mathFunction = "";
         private static string functionInput;
         //public static decimal result;
         
+        // ReSharper disable once MethodTooLong
         public static void WriteOperator(string selectedOperator)
         {
             switch (selectedOperator)
             {
                 case "addition":
-                    mathOperator = " + ";
-                    AddOperator();
+                    mathFunction = " + ";
+                    AddSimpleOperator();
                     break;
                 case "subtraction":
-                    mathOperator = " - ";
-                    AddOperator();
+                    mathFunction = " - ";
+                    AddSimpleOperator();
                     break;
                 case "multiplication":
-                    mathOperator = " ╳ ";
-                    AddOperator();
+                    mathFunction = " ╳ ";
+                    AddSimpleOperator();
                     break;
                 case "division":
-                    mathOperator = " ÷ ";
-                    AddOperator();
+                    mathFunction = " ÷ ";
+                    AddSimpleOperator();
                     break;
                 case "percent":
+                    ExecuteFunction(selectedOperator);
                     break;
                 case "squareRoot":
-                    mathOperator = " √() ";
+                    mathFunction = " √() ";
                     AddComplexOperator();
+                    ExecuteFunction(selectedOperator);
                     break;
                 case "powerOfTwo":
-                    mathOperator = " sqr() ";
+                    mathFunction = " sqr() ";
                     AddComplexOperator();
+                    ExecuteFunction(selectedOperator);
                     break;
                 case "oneOver":
-                    mathOperator = " 1/() ";
+                    mathFunction = " 1/() ";
                     AddComplexOperator();
-                    break;
-                default:
+                    ExecuteFunction(selectedOperator);
                     break;
             }
 
             #region MyRegion
-
-            //if (!DisplayInfo.IsOperatorShown)
-            //{
-            //    DisplayInfo.currentExpression += DisplayInfo.currentVarValue;
-            //    AddOperator();
-            //}
-            //if (DisplayInfo.IsOperatorShown & DisplayInfo.secondVarValue == "")
+            
+            //if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.secondVarValue == "")
             //{
             //    RemoveCharacters(3);
-            //    AddOperator();
+            //    AddSimpleOperator();
             //}
-            //if (DisplayInfo.IsOperatorShown & DisplayInfo.secondVarValue != "")
+            //if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.secondVarValue != "")
             //{
             //    DisplayInfo.currentExpression += DisplayInfo.secondVarValue;
             //    AddOperator();
             //    ExecuteFunction(firstOperator);
             //    firstOperator = currentOperator; currentOperator = "";
             //}
-            //DisplayInfo.currentVarValue = DisplayInfo.expressionValue.ToString(CultureInfo.InvariantCulture);
-
+            DisplayInfo.firstVarValue = DisplayInfo.expressionValue.ToString(CultureInfo.InvariantCulture);
 
             #endregion
-            
         }
 
         private static void AddOperator()
         {
-            DisplayInfo.currentExpression += mathOperator;
-            DisplayInfo.IsOperatorShown = true;
+            DisplayInfo.currentExpression += mathFunction;
+            
+            if (DisplayInfo.IsFirstOperatorShown)
+            {
+                DisplayInfo.IsSecondOperatorShown = true;
+            }
+            DisplayInfo.IsFirstOperatorShown = true;
         }
+        private static void AddSimpleOperator()
+        {
+            if (!DisplayInfo.IsFirstOperatorShown)
+            {
+                DisplayInfo.currentExpression += DisplayInfo.firstVarValue;
+                AddOperator();
+                
+            }
+            else
+            {
+                if(DisplayInfo.secondVarValue != "")
+                {
+                    DisplayInfo.currentExpression += DisplayInfo.secondVarValue;
+                    AddOperator();
+                    ExecuteFunction(firstOperator);
+                    firstOperator = currentOperator; currentOperator = "";
 
+                }
+            }
+            //DisplayInfo.currentExpression += mathFunction;
+            DisplayInfo.IsFirstOperatorShown = true;
+        }
         private static void AddComplexOperator()
         {
             AddOperator();
             RemoveCharacters(2);
+            if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.IsSecondOperatorShown)
+            {
+                DisplayInfo.currentExpression += 
+                    DisplayInfo.secondVarValue + ") ";
+            }
             DisplayInfo.currentExpression += 
-                DisplayInfo.currentVarValue + ") ";
+                DisplayInfo.firstVarValue + ") ";
         }
 
-        private static void RemoveCharacters(int charNumber)
+        private static void RemoveCharacters(int charAmount)
         {
             DisplayInfo.currentExpression =
                         DisplayInfo.currentExpression.Remove(
-                            DisplayInfo.currentExpression.Length - charNumber);
+                            DisplayInfo.currentExpression.Length - charAmount);
         }
 
         private static void DetermineVariable()
         {
-            if (DisplayInfo.IsOperatorShown)
+            if (!DisplayInfo.IsFirstOperatorShown)
                 functionInput = DisplayInfo.secondVarValue;
             else
-                functionInput = DisplayInfo.currentVarValue;
+                functionInput = DisplayInfo.firstVarValue;
 
         }
 
+        // ReSharper disable once MethodTooLong
         public static void ExecuteFunction(string selectedOperator)
         {
-            DetermineVariable();
+            if (selectedOperator!="percent")
+            {
+                DetermineVariable();
+            }
+            //DetermineVariable();
             switch (selectedOperator)
             {
                 case "addition":
@@ -123,7 +155,11 @@ namespace CalculatorWin10
                     Division();
                     break;
                 case "percent":
-                    Percentage(functionInput);
+                    Percentage(
+                        DisplayInfo.IsFirstOperatorShown ? 
+                        DisplayInfo.secondVarValue
+                        : 0.ToString());
+                    AddComplexOperator();
                     break;
                 case "squareRoot":
                     SquareRoot(functionInput);
@@ -134,45 +170,43 @@ namespace CalculatorWin10
                 case "oneOver":
                     OneOver(functionInput);
                     break;
-                default:
-                    break;
             }
         }
 
         private static void Addition()
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.currentVarValue)
+                decimal.Parse(DisplayInfo.firstVarValue)
                 + decimal.Parse(DisplayInfo.secondVarValue);
             DisplayInfo.secondVarValue = "";
         }
         private static void Subtraction()
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.currentVarValue)
+                decimal.Parse(DisplayInfo.firstVarValue)
                 - decimal.Parse(DisplayInfo.secondVarValue);
             DisplayInfo.secondVarValue = "";
         }
         private static void Multiplication()
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.currentVarValue)
+                decimal.Parse(DisplayInfo.firstVarValue)
                 * decimal.Parse(DisplayInfo.secondVarValue);
             DisplayInfo.secondVarValue = "";
         }
         private static void Division()
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.currentVarValue)
+                decimal.Parse(DisplayInfo.firstVarValue)
                 / decimal.Parse(DisplayInfo.secondVarValue);
             DisplayInfo.secondVarValue = "";
         }
         private static void Percentage(string input)
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(input)
+                decimal.Parse(DisplayInfo.firstVarValue)
                 * decimal.Parse(input) / 100m;
-            DisplayInfo.secondVarValue = "";
+            //DisplayInfo.secondVarValue = "";
         }
         private static void SquareRoot(string input)
         {
@@ -193,7 +227,7 @@ namespace CalculatorWin10
         private static void OneOver(string input)
         {
             DisplayInfo.expressionValue =
-                1/ decimal.Parse(input);
+                1m/ decimal.Parse(input);
             //DisplayInfo.secondVarValue = "";
         }
     }

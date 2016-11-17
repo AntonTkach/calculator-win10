@@ -111,7 +111,7 @@
                    Grid.ColumnSpan="22"
                    VerticalAlignment="Top"
                    HorizontalAlignment="Right" 
-                   FontSize="50"/>
+                   FontSize="42"/>
         
 
         <Button x:Name="memoryClear" 

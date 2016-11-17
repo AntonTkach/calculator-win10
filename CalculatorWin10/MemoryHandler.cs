@@ -12,7 +12,7 @@ namespace CalculatorWin10
         public static void ActionMemory(string buttonValue)
         {
             decimal tempMemory = 0;
-            if (decimal.TryParse(DisplayInfo.currentVarValue, out tempMemory))
+            if (decimal.TryParse(DisplayInfo.firstVarValue, out tempMemory))
             {
                 switch (buttonValue)
                 {
