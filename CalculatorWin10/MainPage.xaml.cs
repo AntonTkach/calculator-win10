@@ -15,7 +15,10 @@ namespace CalculatorWin10
             myObj = ((Button)sender).Tag;
             ClickHandler.InformationPassed(myObj.ToString());
             expressionView.Text = DisplayInfo.currentExpression;
-            screen.Text = DisplayInfo.ExpressionToSuitable();
+            screen.Text = DisplayInfo.ErrorOccured ? 
+                "Cannot divide by zero" : DisplayInfo.ExpressionToSuitable();
+            DisplayInfo.ErrorOccured = false;
+
         }
         // OTHER FUNCTIONS
         private void menu_Click(object sender, RoutedEventArgs e)
@@ -26,5 +29,7 @@ namespace CalculatorWin10
         {
 
         }
+
+
     }
 }
