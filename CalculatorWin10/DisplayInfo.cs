@@ -18,6 +18,7 @@ namespace CalculatorWin10
         public static bool IsFirstOperatorShown = false;
         public static bool IsSecondOperatorShown = false;
         public static bool IsDotShown = false;
+        public static bool ErrorOccured = false;
         public static void DisplayToScreen(string tempChar)
         {
             firstVarValue += tempChar;
@@ -43,25 +44,8 @@ namespace CalculatorWin10
                     IsDotShown = false;
                     break;
                 case "erase":
-                    
-                    if (firstVarValue.Length <= 1)
-                    {
-                        expressionValue = 0;
-                        firstVarValue = "";
-                        break;
-                    }
-                    if (firstVarValue[firstVarValue.Length - 1]
-                        .ToString() == ".")
-                    {
-                        IsDotShown = false;
-                    }
-                    firstVarValue = 
-                        firstVarValue.Remove(
-                            firstVarValue.Length - 1);
-                    if (firstVarValue == "") firstVarValue = "0";
-                    expressionValue = decimal.Parse(firstVarValue);
-                    
-                    
+                    Erase(IsFirstOperatorShown ? secondVarValue : firstVarValue);
+
                     break;
                 default:
                     break;
@@ -70,15 +54,26 @@ namespace CalculatorWin10
 
         public static void EqualHandler()
         {
+            if (ErrorOccured)
+            {
+                InfoHandler("clearEverything");
+            }
+            if (!(IsFirstOperatorShown&IsSecondOperatorShown))return;
+            if (secondVarValue=="")
+            {
+                secondVarValue = expressionValue.
+                    ToString(CultureInfo.InvariantCulture);
+            }
             MathControls.ExecuteFunction(MathControls.firstOperator);
             //expressionValue = MathHandler.result;
-            firstVarValue = expressionValue.ToString();
+            firstVarValue = expressionValue.ToString(CultureInfo.InvariantCulture);
             if (IsFirstOperatorShown)
             {
                 currentExpression = "";
                 IsDotShown = false;
                 IsFirstOperatorShown = false;
-                if (MainPage.myObj.ToString() == "equals")
+                IsSecondOperatorShown = false;
+                //if (MainPage.myObj.ToString() == "equals")
                     IsEqualPressed = true;
             }
             else
@@ -96,9 +91,8 @@ namespace CalculatorWin10
             }
             if (!IsFirstOperatorShown)
             {
-                if ((!IsDotShown) && buttonValue == ".")
+                if ((!IsDotShown) & buttonValue == ".")
                 {
-                    //DisplayInfo.DisplayToScreen(buttonValue);
                     IsDotShown = true;
                 }
                 DisplayToScreen(buttonValue);
@@ -112,7 +106,7 @@ namespace CalculatorWin10
         public static string ExpressionToSuitable()
         {
             
-            string s = expressionValue
+            var s = expressionValue
                 .ToString("G16", CultureInfo.InvariantCulture);
             return s;
         }
@@ -126,9 +120,28 @@ namespace CalculatorWin10
             IsFirstOperatorShown = false;
             IsSecondOperatorShown = false;
             IsDotShown = false;
+            ErrorOccured = false;
             MathControls.firstOperator = "";
             MathControls.currentOperator = "";
             MathControls.mathFunction = "";
+            
+        }
+
+        private static void Erase(string variable)
+        {
+            if (variable.Length == 0) return;
+            if (variable[variable.Length - 1]
+                .ToString() == ".")
+            {
+                IsDotShown = false;
+            }
+            variable =
+                variable.Remove(
+                    variable.Length - 1);
+            if (variable.Length == 0) variable = "0";
+            expressionValue = decimal.Parse(variable);
+
+
         }
     }
 }

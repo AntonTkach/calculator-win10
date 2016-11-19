@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+// ReSharper disable ComplexConditionExpression
 
 namespace CalculatorWin10
 {
@@ -9,7 +10,6 @@ namespace CalculatorWin10
         public static string currentOperator = "";
         public static string mathFunction = "";
         private static string functionInput;
-        //public static decimal result;
         
         // ReSharper disable once MethodTooLong
         public static void WriteOperator(string selectedOperator)
@@ -33,6 +33,7 @@ namespace CalculatorWin10
                     AddSimpleOperator();
                     break;
                 case "percent":
+                    mathFunction = "  ";
                     ExecuteFunction(selectedOperator);
                     break;
                 case "squareRoot":
@@ -53,7 +54,7 @@ namespace CalculatorWin10
             }
 
             #region MyRegion
-            
+
             //if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.secondVarValue == "")
             //{
             //    RemoveCharacters(3);
@@ -66,11 +67,31 @@ namespace CalculatorWin10
             //    ExecuteFunction(firstOperator);
             //    firstOperator = currentOperator; currentOperator = "";
             //}
+#endregion
+            
+            if (DisplayInfo.IsSecondOperatorShown)
+            {
+                // ReSharper disable once ComplexConditionExpression
+                if (selectedOperator == "percent" |
+                    selectedOperator == "squareRoot" |
+                    selectedOperator == "powerOfTwo" |
+                    selectedOperator == "oneOver")
+                {
+                    DisplayInfo.secondVarValue = DisplayInfo.expressionValue.ToString(CultureInfo.InvariantCulture);
+                    if (selectedOperator == "percent")
+                    {
+                        DisplayInfo.currentExpression += DisplayInfo.secondVarValue;
+                    }
+                    return;
+                }
+                
+            }
             DisplayInfo.firstVarValue = DisplayInfo.expressionValue.ToString(CultureInfo.InvariantCulture);
 
-            #endregion
+            
         }
 
+        #region Writing / Replacing Operators
         private static void AddOperator()
         {
             DisplayInfo.currentExpression += mathFunction;
@@ -107,26 +128,33 @@ namespace CalculatorWin10
         {
             AddOperator();
             RemoveCharacters(2);
+            if (currentOperator == "percent") return;
             if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.IsSecondOperatorShown)
             {
                 DisplayInfo.currentExpression += 
                     DisplayInfo.secondVarValue + ") ";
+                return;
             }
             DisplayInfo.currentExpression += 
                 DisplayInfo.firstVarValue + ") ";
         }
-
         private static void RemoveCharacters(int charAmount)
         {
             DisplayInfo.currentExpression =
                         DisplayInfo.currentExpression.Remove(
                             DisplayInfo.currentExpression.Length - charAmount);
         }
-
+        #endregion
         private static void DetermineVariable()
         {
-            if (!DisplayInfo.IsFirstOperatorShown)
+            if (DisplayInfo.IsSecondOperatorShown)
+            {
                 functionInput = DisplayInfo.secondVarValue;
+                //if (firstOperator == currentOperator)
+                //    functionInput = DisplayInfo.firstVarValue;
+                //else
+                //    
+            }
             else
                 functionInput = DisplayInfo.firstVarValue;
 
@@ -135,7 +163,9 @@ namespace CalculatorWin10
         // ReSharper disable once MethodTooLong
         public static void ExecuteFunction(string selectedOperator)
         {
-            if (selectedOperator!="percent")
+            if (selectedOperator == "squareRoot" |
+                selectedOperator == "powerOfTwo" |
+                selectedOperator == "oneOver")
             {
                 DetermineVariable();
             }
@@ -173,32 +203,56 @@ namespace CalculatorWin10
             }
         }
 
+        #region Sipmle And Complex Functions
         private static void Addition()
         {
+            if (DisplayInfo.IsEqualPressed)
+                DisplayInfo.secondVarValue = functionInput;
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 + decimal.Parse(DisplayInfo.secondVarValue);
+            functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
         private static void Subtraction()
         {
+            if (DisplayInfo.IsEqualPressed)
+                DisplayInfo.secondVarValue = functionInput;
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 - decimal.Parse(DisplayInfo.secondVarValue);
+            functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
         private static void Multiplication()
         {
+            if (DisplayInfo.IsEqualPressed)
+                DisplayInfo.secondVarValue = functionInput;
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 * decimal.Parse(DisplayInfo.secondVarValue);
+            functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
         private static void Division()
         {
+            #region DivByZeroError
+
+            // ReSharper disable once ComplexConditionExpression
+            if (DisplayInfo.firstVarValue == "0" |
+                DisplayInfo.secondVarValue == "0")
+            {
+                DisplayInfo.ErrorOccured = true;
+                return;
+            }
+
+            #endregion
+            if (DisplayInfo.IsEqualPressed)
+                DisplayInfo.secondVarValue = functionInput;
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 / decimal.Parse(DisplayInfo.secondVarValue);
+            functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
         private static void Percentage(string input)
@@ -206,7 +260,7 @@ namespace CalculatorWin10
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 * decimal.Parse(input) / 100m;
-            //DisplayInfo.secondVarValue = "";
+            
         }
         private static void SquareRoot(string input)
         {
@@ -215,20 +269,34 @@ namespace CalculatorWin10
                 .Sqrt(double.Parse(input))
                 .ToString(CultureInfo.InvariantCulture));
 
-            //DisplayInfo.secondVarValue = "";
+            
         }
         private static void PowerOfTwo(string input)
         {
             DisplayInfo.expressionValue =
                 decimal.Parse(input)
                 * decimal.Parse(input);
-            //DisplayInfo.secondVarValue = "";
+            firstOperator = "";
+
         }
         private static void OneOver(string input)
         {
+            #region DivByZeroError
+
+            // ReSharper disable once ComplexConditionExpression
+            if (DisplayInfo.firstVarValue == "0" |
+                DisplayInfo.secondVarValue == "0")
+            {
+                DisplayInfo.ErrorOccured = true;
+                return;
+            }
+
+            #endregion
+
             DisplayInfo.expressionValue =
                 1m/ decimal.Parse(input);
-            //DisplayInfo.secondVarValue = "";
+            
         }
+        #endregion
     }
 }
