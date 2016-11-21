@@ -9,6 +9,7 @@
 
 <br>Features yet to be made:
 <br>Continious input (e.g. after square root, the addition fails to work => needs fixing)
+<br>Coosing another operator during input
 <br>Using dot button
 <br>Using negate (+/-) button
 <br>Using memory buttons to store variable (worked before, but I broke it)
