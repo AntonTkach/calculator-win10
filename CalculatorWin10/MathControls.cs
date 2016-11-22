@@ -6,6 +6,7 @@ namespace CalculatorWin10
 {
     internal static class MathControls
     {
+        #region MathVars
         public static string firstOperator = "";
         public static string currentOperator = "";
         public static string mathFunction = "";
@@ -13,7 +14,7 @@ namespace CalculatorWin10
         public static bool isMultiInput;
         public static string multiInputValue;
         public static int multiInputTimes;
-
+        #endregion
         // ReSharper disable once MethodTooLong
         public static void WriteOperator(string selectedOperator)
         {
@@ -267,8 +268,8 @@ namespace CalculatorWin10
         }
         private static void Multiplication()
         {
-            if (DisplayInfo.IsEqualPressed)
-                DisplayInfo.secondVarValue = functionInput;
+            //if (DisplayInfo.IsEqualPressed)
+            //    DisplayInfo.secondVarValue = functionInput;
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 * decimal.Parse(DisplayInfo.secondVarValue);
@@ -278,18 +279,19 @@ namespace CalculatorWin10
         private static void Division()
         {
             #region DivByZeroError
-
-            // ReSharper disable once ComplexConditionExpression
-            if (DisplayInfo.firstVarValue == "0" |
-                DisplayInfo.secondVarValue == "0")
+            switch (DisplayInfo.secondVarValue)
             {
-                DisplayInfo.ErrorOccured = true;
-                return;
+                case "0":
+                    DisplayInfo.ErrorOccured = true;
+                    return;
+                case "":
+                    return;
             }
-
+            if (DisplayInfo.firstVarValue==""|
+                DisplayInfo.secondVarValue=="") return;
             #endregion
-            if (DisplayInfo.IsEqualPressed)
-                DisplayInfo.secondVarValue = functionInput;
+            //if (DisplayInfo.IsEqualPressed)
+            //    DisplayInfo.secondVarValue = functionInput;
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 / decimal.Parse(DisplayInfo.secondVarValue);
@@ -333,15 +335,14 @@ namespace CalculatorWin10
         private static void OneOver(string input)
         {
             #region DivByZeroError
-
-            // ReSharper disable once ComplexConditionExpression
-            if (DisplayInfo.firstVarValue == "0" |
-                DisplayInfo.secondVarValue == "0")
+            switch (input)
             {
-                DisplayInfo.ErrorOccured = true;
-                return;
+                case "0":
+                    DisplayInfo.ErrorOccured = true;
+                    return;
+                case "":
+                    return;
             }
-
             #endregion
 
             DisplayInfo.expressionValue =
