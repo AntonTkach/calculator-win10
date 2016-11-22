@@ -33,22 +33,22 @@ namespace CalculatorWin10
                     AddSimpleOperator();
                     break;
                 case "percent":
-                    ExecuteFunction(selectedOperator);
+                    ExecuteFunction();
                     break;
                 case "squareRoot":
                     mathFunction = " √() ";
                     AddComplexOperator();
-                    ExecuteFunction(selectedOperator);
+                    ExecuteFunction();
                     break;
                 case "powerOfTwo":
                     mathFunction = " sqr() ";
                     AddComplexOperator();
-                    ExecuteFunction(selectedOperator);
+                    ExecuteFunction();
                     break;
                 case "oneOver":
                     mathFunction = " 1/() ";
                     AddComplexOperator();
-                    ExecuteFunction(selectedOperator);
+                    ExecuteFunction();
                     break;
             }
 
@@ -133,7 +133,10 @@ namespace CalculatorWin10
         }
 
         // ReSharper disable once MethodTooLong
-        public static void ExecuteFunction(string selectedOperator)
+        public static void ExecuteFunction(
+            string selectedOperator, 
+            decimal num1, 
+            decimal num2)
         {
             if (selectedOperator!="percent")
             {
@@ -143,16 +146,16 @@ namespace CalculatorWin10
             switch (selectedOperator)
             {
                 case "addition":
-                    Addition();
+                    Addition(num1, num2);
                     break;
                 case "subtraction":
-                    Subtraction();
+                    Subtraction(num1, num2);
                     break;
                 case "multiplication":
-                    Multiplication();
+                    Multiplication(num1, num2);
                     break;
                 case "division":
-                    Division();
+                    Division(num1, num2);
                     break;
                 case "percent":
                     Percentage(
@@ -173,32 +176,31 @@ namespace CalculatorWin10
             }
         }
 
-        private static void Addition()
+        #region Functions
+        
+        private static void Addition(decimal num1, decimal num2)
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.firstVarValue)
-                + decimal.Parse(DisplayInfo.secondVarValue);
+                num1 + num2;
+                
             DisplayInfo.secondVarValue = "";
         }
-        private static void Subtraction()
+        private static void Subtraction(decimal num1, decimal num2)
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.firstVarValue)
-                - decimal.Parse(DisplayInfo.secondVarValue);
+                num1 - num2;
             DisplayInfo.secondVarValue = "";
         }
-        private static void Multiplication()
+        private static void Multiplication(decimal num1, decimal num2)
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.firstVarValue)
-                * decimal.Parse(DisplayInfo.secondVarValue);
+                num1 * num2;
             DisplayInfo.secondVarValue = "";
         }
-        private static void Division()
+        private static void Division(decimal num1, decimal num2)
         {
             DisplayInfo.expressionValue =
-                decimal.Parse(DisplayInfo.firstVarValue)
-                / decimal.Parse(DisplayInfo.secondVarValue);
+                num1 / num2;
             DisplayInfo.secondVarValue = "";
         }
         private static void Percentage(string input)
@@ -230,5 +232,6 @@ namespace CalculatorWin10
                 1m/ decimal.Parse(input);
             //DisplayInfo.secondVarValue = "";
         }
+        #endregion
     }
 }
