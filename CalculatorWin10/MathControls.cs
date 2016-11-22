@@ -309,15 +309,25 @@ namespace CalculatorWin10
                 .Parse(Math
                 .Sqrt(double.Parse(input))
                 .ToString(CultureInfo.InvariantCulture));
+            if (isMultiInput) return;
+            else
+            {
+                multiInputValue = input;
+            }
 
-            
+
         }
         private static void PowerOfTwo(string input)
         {
             DisplayInfo.expressionValue =
                 decimal.Parse(input)
                 * decimal.Parse(input);
-            firstOperator = "";
+            //firstOperator = "";
+            if (isMultiInput) return;
+            else
+            {
+                multiInputValue = input;
+            }
 
         }
         private static void OneOver(string input)
