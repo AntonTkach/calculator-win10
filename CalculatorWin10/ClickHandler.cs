@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ReSharper disable ComplexConditionExpression
 
 namespace CalculatorWin10
 {
@@ -11,19 +7,13 @@ namespace CalculatorWin10
         public static void InformationPassed(string buttonValue)
         {
             int tempResult;
-            if (int.TryParse(buttonValue, out tempResult)
-                //||DisplayInfo.currentVarValue=="0"
-                )
+            if (int.TryParse(buttonValue, out tempResult))
             {
-                
-                DisplayInfo.DisplayNumbers(buttonValue);
-                //if(DisplayInfo.IsOperatorShown)
-                //{
-                //    DisplayInfo.IsOperatorShown = false;
-                //}
+                DisplayInfo.DisplayNumbers(buttonValue);   
             }
             else
             {
+                #region BigIfSentence
                 if (
                     buttonValue=="memoryClear" ||
                     buttonValue=="memoryRetrieve" ||
@@ -61,13 +51,17 @@ namespace CalculatorWin10
                         MathControls.WriteOperator(MathControls.currentOperator);
                     }
                     
-                    ///MathHandler.DeterminingOperator(MathHandler.firstOperator);
-                    //if(DisplayInfo.IsSecondOperatorShown) MathHandler.DeterminingMathFunction(MathHandler.currentOperator);
+                    
                 }
                 else if (buttonValue == "equals")
                 {
                     DisplayInfo.EqualHandler();
                 }
+                else if (buttonValue==".")
+                {
+                    
+                }
+                #endregion
             }
         }
     }
