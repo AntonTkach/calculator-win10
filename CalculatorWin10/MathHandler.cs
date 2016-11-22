@@ -11,6 +11,7 @@ namespace CalculatorWin10
         public static string mathFunction = "";
         private static string functionInput;
         private static bool isMultiInput;
+        private static string multiInputValue;
         private static int multiInputTimes;
         
         // ReSharper disable once MethodTooLong
@@ -142,18 +143,22 @@ namespace CalculatorWin10
         {
             if (isMultiInput)
             {
-                RemoveCharacters(2+multiInputTimes);
+                RemoveCharacters(1+
+                    functionInput
+                    //.ToString(CultureInfo.InvariantCulture)
+                    .Length);
                 isMultiInput = false;
                 AddComplexOperator();
                 isMultiInput = true;
-                DisplayInfo.currentExpression += string.Concat(")", multiInputTimes);
+
+                //DisplayInfo.currentExpression += (String.Concat(")", multiInputTimes));
             }
             else
             {
                 AddOperator();
                 RemoveCharacters(1);
                 if (currentOperator == "percent") return;
-                if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.IsSecondOperatorShown)
+                if (DisplayInfo.IsSecondOperatorShown)
                 {
                     DisplayInfo.currentExpression +=
                         DisplayInfo.secondVarValue + ")";
@@ -313,9 +318,9 @@ namespace CalculatorWin10
                 * decimal.Parse(input);
             //DisplayInfo.firstVarValue == "0" |
             //    DisplayInfo.secondVarValue == "0"
-            //if (IsMultiInput) DisplayInfo.secondVarValue =
-            //        DisplayInfo.expressionValue.
-            //        ToString(CultureInfo.InvariantCulture);
+            if (isMultiInput) DisplayInfo.secondVarValue =
+                    DisplayInfo.expressionValue.
+                    ToString(CultureInfo.InvariantCulture);
             //firstOperator = "";
 
         }
@@ -323,7 +328,7 @@ namespace CalculatorWin10
         {
             #region DivByZeroError
 
-            // ReSharper disable once ComplexConditionExpression
+            
             switch (input)
             {
                 case "0":
@@ -337,9 +342,10 @@ namespace CalculatorWin10
 
             DisplayInfo.expressionValue =
                 1m/ decimal.Parse(input);
-            //if (IsMultiInput) DisplayInfo.secondVarValue =
-            //        DisplayInfo.expressionValue.
-            //        ToString(CultureInfo.InvariantCulture);
+            if (isMultiInput) DisplayInfo.secondVarValue =
+                    DisplayInfo.expressionValue.
+                    ToString(CultureInfo.InvariantCulture);
+            
 
         }
         #endregion
