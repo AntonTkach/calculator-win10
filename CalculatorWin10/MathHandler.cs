@@ -10,10 +10,25 @@ namespace CalculatorWin10
         public static string currentOperator = "";
         public static string mathFunction = "";
         private static string functionInput;
+        private static bool isMultiInput;
+        private static string multiInputValue;
+        private static int multiInputTimes;
         
         // ReSharper disable once MethodTooLong
         public static void WriteOperator(string selectedOperator)
         {
+            if (currentOperator == firstOperator)
+            {
+                
+                multiInputTimes += 1;
+            }
+            else
+            {
+                
+                multiInputTimes = 0;
+            }
+
+            isMultiInput = currentOperator == firstOperator;
             switch (selectedOperator)
             {
                 case "addition":
@@ -37,17 +52,17 @@ namespace CalculatorWin10
                     ExecuteFunction(selectedOperator);
                     break;
                 case "squareRoot":
-                    mathFunction = " √() ";
+                    mathFunction = "√()";
                     AddComplexOperator();
                     ExecuteFunction(selectedOperator);
                     break;
                 case "powerOfTwo":
-                    mathFunction = " sqr() ";
+                    mathFunction = "sqr()";
                     AddComplexOperator();
                     ExecuteFunction(selectedOperator);
                     break;
                 case "oneOver":
-                    mathFunction = " 1/() ";
+                    mathFunction = "1/()";
                     AddComplexOperator();
                     ExecuteFunction(selectedOperator);
                     break;
@@ -126,17 +141,33 @@ namespace CalculatorWin10
         }
         private static void AddComplexOperator()
         {
-            AddOperator();
-            RemoveCharacters(2);
-            if (currentOperator == "percent") return;
-            if (DisplayInfo.IsFirstOperatorShown & DisplayInfo.IsSecondOperatorShown)
+            if (isMultiInput)
             {
-                DisplayInfo.currentExpression += 
-                    DisplayInfo.secondVarValue + ") ";
-                return;
+                RemoveCharacters(1+
+                    functionInput
+                    //.ToString(CultureInfo.InvariantCulture)
+                    .Length);
+                isMultiInput = false;
+                AddComplexOperator();
+                isMultiInput = true;
+
+                //DisplayInfo.currentExpression += (String.Concat(")", multiInputTimes));
             }
-            DisplayInfo.currentExpression += 
-                DisplayInfo.firstVarValue + ") ";
+            else
+            {
+                AddOperator();
+                RemoveCharacters(1);
+                if (currentOperator == "percent") return;
+                if (DisplayInfo.IsSecondOperatorShown)
+                {
+                    DisplayInfo.currentExpression +=
+                        DisplayInfo.secondVarValue + ")";
+                    return;
+                }
+                DisplayInfo.currentExpression +=
+                    DisplayInfo.firstVarValue + ")";
+            }
+            
         }
         private static void RemoveCharacters(int charAmount)
         {
@@ -150,10 +181,17 @@ namespace CalculatorWin10
             if (DisplayInfo.IsSecondOperatorShown)
             {
                 functionInput = DisplayInfo.secondVarValue;
+
                 //if (firstOperator == currentOperator)
+                //{
                 //    functionInput = DisplayInfo.firstVarValue;
+                //    IsMultiInput = true;
+                //}
+
                 //else
-                //    
+
+                //    IsMultiInput = false;
+
             }
             else
                 functionInput = DisplayInfo.firstVarValue;
@@ -204,6 +242,7 @@ namespace CalculatorWin10
         }
 
         #region Sipmle And Complex Functions
+
         private static void Addition()
         {
             if (DisplayInfo.IsEqualPressed)
@@ -273,29 +312,41 @@ namespace CalculatorWin10
         }
         private static void PowerOfTwo(string input)
         {
+            if (input == "") return;
             DisplayInfo.expressionValue =
                 decimal.Parse(input)
                 * decimal.Parse(input);
-            firstOperator = "";
+            //DisplayInfo.firstVarValue == "0" |
+            //    DisplayInfo.secondVarValue == "0"
+            if (isMultiInput) DisplayInfo.secondVarValue =
+                    DisplayInfo.expressionValue.
+                    ToString(CultureInfo.InvariantCulture);
+            //firstOperator = "";
 
         }
         private static void OneOver(string input)
         {
             #region DivByZeroError
 
-            // ReSharper disable once ComplexConditionExpression
-            if (DisplayInfo.firstVarValue == "0" |
-                DisplayInfo.secondVarValue == "0")
+            
+            switch (input)
             {
-                DisplayInfo.ErrorOccured = true;
-                return;
+                case "0":
+                    DisplayInfo.ErrorOccured = true;
+                    return;
+                case "":
+                    return;
             }
 
             #endregion
 
             DisplayInfo.expressionValue =
                 1m/ decimal.Parse(input);
+            if (isMultiInput) DisplayInfo.secondVarValue =
+                    DisplayInfo.expressionValue.
+                    ToString(CultureInfo.InvariantCulture);
             
+
         }
         #endregion
     }
