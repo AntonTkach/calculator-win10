@@ -7,12 +7,14 @@ namespace CalculatorWin10
         public static void InformationPassed(string buttonValue)
         {
             int tempResult;
-            if (int.TryParse(buttonValue, out tempResult))
+            if (int.TryParse(buttonValue, out tempResult)|
+                buttonValue==".")
             {
                 DisplayInfo.DisplayNumbers(buttonValue);   
             }
             else
             {
+                #region BigIfSentence
                 if (
                     buttonValue=="memoryClear" ||
                     buttonValue=="memoryRetrieve" ||
@@ -56,6 +58,11 @@ namespace CalculatorWin10
                 {
                     DisplayInfo.EqualHandler();
                 }
+                else if (buttonValue == "plusMinus")
+                {
+                    DisplayInfo.PlusMinus();
+                }
+                #endregion
             }
         }
     }

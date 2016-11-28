@@ -9,14 +9,15 @@ namespace CalculatorWin10
         {
             InitializeComponent();
         }
-        public static object myObj;
+        private static object myObj;
         private void ButtonClicked(object sender, RoutedEventArgs e)
         {
             myObj = ((Button)sender).Tag;
             ClickHandler.InformationPassed(myObj.ToString());
             expressionView.Text = DisplayInfo.currentExpression;
             screen.Text = DisplayInfo.ErrorOccured ? 
-                "Cannot divide by zero" : DisplayInfo.ExpressionToSuitable();
+                "Cannot divide by zero" : DisplayInfo.ExpressionToSuitable(
+                    DisplayInfo.expressionValue);
             DisplayInfo.ErrorOccured = false;
 
         }
