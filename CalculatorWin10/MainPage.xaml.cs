@@ -16,7 +16,8 @@ namespace CalculatorWin10
             ClickHandler.InformationPassed(myObj.ToString());
             expressionView.Text = DisplayInfo.currentExpression;
             screen.Text = DisplayInfo.ErrorOccured ? 
-                "Cannot divide by zero" : DisplayInfo.ExpressionToSuitable();
+                "Cannot divide by zero" : DisplayInfo.ExpressionToSuitable(
+                    DisplayInfo.expressionValue);
             DisplayInfo.ErrorOccured = false;
 
         }

@@ -7,7 +7,8 @@ namespace CalculatorWin10
         public static void InformationPassed(string buttonValue)
         {
             int tempResult;
-            if (int.TryParse(buttonValue, out tempResult))
+            if (int.TryParse(buttonValue, out tempResult)|
+                buttonValue==".")
             {
                 DisplayInfo.DisplayNumbers(buttonValue);   
             }
@@ -57,9 +58,9 @@ namespace CalculatorWin10
                 {
                     DisplayInfo.EqualHandler();
                 }
-                else if (buttonValue==".")
+                else if (buttonValue == "plusMinus")
                 {
-                    
+                    DisplayInfo.PlusMinus();
                 }
                 #endregion
             }

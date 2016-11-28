@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
+﻿using System.Globalization;
+// ReSharper disable RedundantDefaultMemberInitializer
+// ReSharper disable ComplexConditionExpression
 
 namespace CalculatorWin10
 {
@@ -24,7 +20,7 @@ namespace CalculatorWin10
         public static void DisplayToScreen(string tempChar)
         {
             firstVarValue += tempChar;
-            bool tempBool = decimal.TryParse(firstVarValue, out expressionValue);
+            //decimal.TryParse(firstVarValue, out expressionValue);
         }
 
         public static void InfoHandler(string buttonValue)
@@ -77,7 +73,7 @@ namespace CalculatorWin10
             //}
             MathControls.ExecuteFunction(MathControls.firstOperator);
             //expressionValue = MathHandler.result;
-            firstVarValue = expressionValue.ToString(CultureInfo.InvariantCulture);
+            firstVarValue = ExpressionToSuitable(expressionValue);
             if (IsFirstOperatorShown)
             {
                 currentExpression = "";
@@ -95,6 +91,7 @@ namespace CalculatorWin10
         }
         public static void DisplayNumbers(string buttonValue)
         {
+            if (IsDotShown & buttonValue == ".") return;
             if (currentExpression=="" & IsEqualPressed)
             {
                 firstVarValue = "";
@@ -102,24 +99,47 @@ namespace CalculatorWin10
             }
             if (!IsFirstOperatorShown)
             {
-                if ((!IsDotShown) & buttonValue == ".")
+                if ((!IsDotShown) &
+                    buttonValue == ".")
                 {
-                    IsDotShown = true;
+                    InputDot(ref firstVarValue);
+                    expressionValue = decimal.Parse(firstVarValue);
+                    return;
                 }
-                DisplayToScreen(buttonValue);
+                if (firstVarValue != "")
+                {
+                    if (IsDotShown &
+                    firstVarValue
+                    [firstVarValue.Length - 1]
+                    .ToString() == "0")
+                    {
+                        if (buttonValue != "0")
+                            firstVarValue = firstVarValue.Remove(firstVarValue.Length - 1);
+                        //else
+                        //    return;
+                    }
+                }
+                
+                firstVarValue += buttonValue;
+                expressionValue = decimal.Parse(firstVarValue);
             }
             else
             {
+                if ((!IsDotShown) &
+                    buttonValue == ".")
+                {
+                    InputDot(ref secondVarValue);
+                    expressionValue = decimal.Parse(secondVarValue);
+                    return;
+
+                }
                 secondVarValue += buttonValue;
                 expressionValue = decimal.Parse(secondVarValue);
             }
         }
-        public static string ExpressionToSuitable()
+        public static string ExpressionToSuitable(decimal arg0)
         {
-            
-            var s = expressionValue
-                .ToString("G16", CultureInfo.InvariantCulture);
-            return s;
+            return arg0.ToString("G16", CultureInfo.InvariantCulture);
         }
         private static void ClearEverything()
         {
@@ -155,6 +175,42 @@ namespace CalculatorWin10
             expressionValue = decimal.Parse(variable);
 
 
+        }
+
+        private static void InputDot(ref string variable)
+        {
+            
+            {
+                if (variable == "")
+                    variable += "0";
+
+                if (variable == "0")
+                    variable += ".0";
+                IsDotShown = true;
+            }
+        }
+
+        public static void PlusMinus()
+        {
+            expressionValue = expressionValue - (2*expressionValue);
+            if (IsFirstOperatorShown)
+            {
+                ConvertNegative(ref secondVarValue);
+            }
+            else
+            {
+                ConvertNegative(ref firstVarValue);
+            }
+        }
+
+        private static void ConvertNegative(ref string input)
+        {
+            if (MathControls.currentOperator=="minus")
+            input = "negative(" + input + ")";
+            else
+            {
+                input = "-" + input;
+            }
         }
     }
 }

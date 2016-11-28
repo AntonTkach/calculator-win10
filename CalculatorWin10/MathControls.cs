@@ -120,7 +120,10 @@ namespace CalculatorWin10
         {
             if (!DisplayInfo.IsFirstOperatorShown)
             {
-                DisplayInfo.currentExpression += DisplayInfo.firstVarValue;
+                DisplayInfo.currentExpression += 
+                    DisplayInfo.ExpressionToSuitable(
+                        decimal.Parse(DisplayInfo
+                        .firstVarValue));
                 AddOperator();
                 
             }
@@ -128,7 +131,10 @@ namespace CalculatorWin10
             {
                 if(DisplayInfo.secondVarValue != "")
                 {
-                    DisplayInfo.currentExpression += DisplayInfo.secondVarValue;
+                    DisplayInfo.currentExpression +=
+                    DisplayInfo.ExpressionToSuitable(
+                        decimal.Parse(DisplayInfo
+                        .secondVarValue));
                     AddOperator();
                     ExecuteFunction(firstOperator);
                     firstOperator = currentOperator; currentOperator = "";
@@ -311,13 +317,8 @@ namespace CalculatorWin10
                 .Parse(Math
                 .Sqrt(double.Parse(input))
                 .ToString(CultureInfo.InvariantCulture));
-            if (isMultiInput) return;
-            else
-            {
+            if (!isMultiInput)
                 multiInputValue = input;
-            }
-
-
         }
         private static void PowerOfTwo(string input)
         {
@@ -325,12 +326,8 @@ namespace CalculatorWin10
                 decimal.Parse(input)
                 * decimal.Parse(input);
             //firstOperator = "";
-            if (isMultiInput) return;
-            else
-            {
+            if (!isMultiInput)
                 multiInputValue = input;
-            }
-
         }
         private static void OneOver(string input)
         {
@@ -348,12 +345,13 @@ namespace CalculatorWin10
             DisplayInfo.expressionValue =
                 1m/ decimal.Parse(input);
             
-            if (isMultiInput) DisplayInfo.secondVarValue =
-                    DisplayInfo.expressionValue.
-                    ToString(CultureInfo.InvariantCulture);
+            if (!isMultiInput)
+                multiInputValue = input;
             else
             {
-                multiInputValue = input;
+                DisplayInfo.secondVarValue =
+                    DisplayInfo.expressionValue.
+                    ToString(CultureInfo.InvariantCulture);
             }
         }
         #endregion
