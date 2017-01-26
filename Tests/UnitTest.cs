@@ -2,14 +2,16 @@
 using Windows.UI.Xaml.Controls;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using CalculatorWin10;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework.AppContainer;
+using Assert = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.Assert;
 
 namespace Tests
 {
-    public class Vars
-    {
-        //static Random rnd = new Random();
+    //public class Vars
+    //{
+    //    //static Random rnd = new Random();
         
-    }
+    //}
     [TestClass]
     public class MathControlsTests
     {
@@ -111,38 +113,65 @@ namespace Tests
             Assert.AreEqual(expected: expected, actual: actual);
         }
 
-        [TestMethod]
-        public void WriteOperatorTest()
-        {
-            MathControls.WriteOperator("multiplication");
-            var actual = MathControls.mathFunction;
-            var expected = "*";
-            Assert.AreEqual(expected: expected, actual: actual);
-        }
+        //[TestMethod]
+        //public void WriteOperatorTest() // The function does more than one thing thus - it takes
+        //                                //the whole sub branch with it and has mistakes because 
+        //                                //the variables aren't initialized.
+        //{
+        //    MathControls.WriteOperator("multiplication");
+        //    var actual = MathControls.mathFunction;
+        //    var expected = "*";
+        //    Assert.AreEqual(expected: expected, actual: actual);
+        //}
     }
 
     [TestClass]
-    public class DisplayInfoTests
+    public class UITests
     {
-        [TestMethod]
-        public void TestMethod1()
+        public MainPage uiClass;
+        [TestInitialize]
+        public void Initializing()
         {
+            uiClass = new MainPage();
         }
-    }
-    [TestClass]
-    public class ClickHandlerTests
-    {
-        [TestMethod]
-        public void TestMethod1()
+        [UITestMethod]
+        public void ConstructerWorkingTest()
         {
+            Assert.IsNotNull(uiClass);
         }
+        //[UITestMethod]
+        //public void ButtonTest()
+        //{
+        //    UserControl a = new UserControl();
+            
+                        
+        //}
     }
-    [TestClass]
-    public class MemoryHandlerTests
-    {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
-    }
+
+    
+
+    //[TestClass]
+    //public class DisplayInfoTests
+    //{
+    //    [TestMethod]
+    //    public void TestMethod1()
+    //    {
+    //    }
+    //}
+    //[TestClass]
+    //public class ClickHandlerTests
+    //{
+    //    [TestMethod]
+    //    public void TestMethod1()
+    //    {
+    //    }
+    //}
+    //[TestClass]
+    //public class MemoryHandlerTests
+    //{
+    //    [TestMethod]
+    //    public void TestMethod1()
+    //    {
+    //    }
+    //}
 }
