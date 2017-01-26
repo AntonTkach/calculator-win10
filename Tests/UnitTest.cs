@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Controls;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using CalculatorWin10;
 
@@ -59,6 +60,63 @@ namespace Tests
             MathControls.Division();
             var actual = (Math.Round(DisplayInfo.expressionValue, 10)).ToString();
             var expected = (Math.Round((arg0 / arg1), 10)).ToString();
+            Assert.AreEqual(expected: expected, actual: actual);
+        }
+        [TestMethod]
+        public void PecentageTest()
+        {
+            DisplayInfo.firstVarValue = null;
+            
+            DisplayInfo.firstVarValue = arg0.ToString();
+            
+            MathControls.Percentage(arg0.ToString());
+            var actual = (Math.Round(DisplayInfo.expressionValue, 9)).ToString();
+            var expected = (Math.Round(arg0*arg0 / 100f, 9)).ToString();
+            Assert.AreEqual(expected: expected, actual: actual);
+        }
+        [TestMethod]
+        public void SquareRootTest()
+        {
+            DisplayInfo.firstVarValue = null;
+            DisplayInfo.secondVarValue = null;
+            DisplayInfo.firstVarValue = arg0.ToString();
+            DisplayInfo.secondVarValue = arg1.ToString();
+            MathControls.SquareRoot(arg0.ToString());
+            var actual = (Math.Round(DisplayInfo.expressionValue, 10)).ToString();
+            var expected = (Math.Round(Math.Sqrt(arg0), 10)).ToString();
+            Assert.AreEqual(expected: expected, actual: actual);
+        }
+        [TestMethod]
+        public void PowerOfTwoTest()
+        {
+            DisplayInfo.firstVarValue = null;
+            
+            DisplayInfo.firstVarValue = arg0.ToString();
+            
+            MathControls.PowerOfTwo(arg0.ToString());
+            var actual = (Math.Round(DisplayInfo.expressionValue, 10)).ToString();
+            var expected = (Math.Round(arg0*arg0, 10)).ToString();
+            Assert.AreEqual(expected: expected, actual: actual);
+        }
+        [TestMethod]
+        public void OneOverTest()
+        {
+            DisplayInfo.firstVarValue = null;
+
+            DisplayInfo.firstVarValue = arg0.ToString();
+
+            MathControls.OneOver(arg0.ToString());
+            var actual = (Math.Round(DisplayInfo.expressionValue, 10)).ToString();
+            var expected = (Math.Round(1/arg0, 10)).ToString();
+            Assert.AreEqual(expected: expected, actual: actual);
+        }
+
+        [TestMethod]
+        public void WriteOperatorTest()
+        {
+            MathControls.WriteOperator("multiplication");
+            var actual = MathControls.mathFunction;
+            var expected = "*";
             Assert.AreEqual(expected: expected, actual: actual);
         }
     }
