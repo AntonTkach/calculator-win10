@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace CalculatorWin10
 {
-    internal static class MathControls
+    public static class MathControls
     {
         #region MathVars
         public static string firstOperator = "";
@@ -246,7 +246,7 @@ namespace CalculatorWin10
         }
 
         #region Sipmle And Complex Functions
-        private static void Addition()
+        public static void Addition()
         {
             //if (DisplayInfo.IsEqualPressed)
             //{
@@ -259,7 +259,7 @@ namespace CalculatorWin10
             functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
-        private static void Subtraction()
+        public static void Subtraction()
         {
             //if (DisplayInfo.IsEqualPressed)
             //{
@@ -272,7 +272,7 @@ namespace CalculatorWin10
             functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
-        private static void Multiplication()
+        public static void Multiplication()
         {
             //if (DisplayInfo.IsEqualPressed)
             //    DisplayInfo.secondVarValue = functionInput;
@@ -282,7 +282,7 @@ namespace CalculatorWin10
             functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
-        private static void Division()
+        public static void Division()
         {
             #region DivByZeroError
             switch (DisplayInfo.secondVarValue)
@@ -304,14 +304,14 @@ namespace CalculatorWin10
             functionInput = DisplayInfo.secondVarValue;
             DisplayInfo.secondVarValue = "";
         }
-        private static void Percentage(string input)
+        public static void Percentage(string input)
         {
             DisplayInfo.expressionValue =
                 decimal.Parse(DisplayInfo.firstVarValue)
                 * decimal.Parse(input) / 100m;
             
         }
-        private static void SquareRoot(string input)
+        public static void SquareRoot(string input)
         {
             DisplayInfo.expressionValue = decimal
                 .Parse(Math
@@ -320,7 +320,7 @@ namespace CalculatorWin10
             if (!isMultiInput)
                 multiInputValue = input;
         }
-        private static void PowerOfTwo(string input)
+        public static void PowerOfTwo(string input)
         {
             DisplayInfo.expressionValue =
                 decimal.Parse(input)
@@ -329,7 +329,7 @@ namespace CalculatorWin10
             if (!isMultiInput)
                 multiInputValue = input;
         }
-        private static void OneOver(string input)
+        public static void OneOver(string input)
         {
             #region DivByZeroError
             switch (input)

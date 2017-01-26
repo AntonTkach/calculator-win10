@@ -4,7 +4,7 @@
 
 namespace CalculatorWin10
 {
-    internal static class DisplayInfo
+    public static class DisplayInfo
     {
         #region DisplayVars
         public static string currentExpression = "";
